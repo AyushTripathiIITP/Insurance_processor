@@ -40,7 +40,7 @@ def parse_ai_classification(response_text: str) -> Dict[str, any]:
     Parses the AI response to extract classification details.
     """
     try:
-        classification = "others"  # default
+        classification = "Others"  # default
         confidence = 50  # default
         reasoning = "Unable to parse AI response"
         
@@ -85,13 +85,8 @@ def process_and_classify_document(text: str) -> Dict[str, str]:
     try:
         # Classify the document
         classification_result = classify_document_detailed(text)
-        
-        # Combine results
-        result = {
-            "ocr_text": text,
-            "file_type": classification_result
-        }        
-        return result
+              
+        return classification_result
         
     except Exception as e:
         print(f"Document processing failed: {e}")
