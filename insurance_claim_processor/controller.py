@@ -76,6 +76,7 @@ class DocumentController:
         """
         # Step 1: OCR and quality assessment
         text, quality = process_document_with_gemini_ocr(filepath)
+        metrics_tracker.increment_llm_calls()
         metrics_tracker.set_ocr_quality(quality)
         
         # Step 2: Document classification
