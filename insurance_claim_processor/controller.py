@@ -3,7 +3,7 @@ from flask import request, jsonify, current_app
 from werkzeug.utils import secure_filename
 
 from src.ocr_processor import process_document_with_gemini_ocr
-from src.document_classifier import classify_document
+from src.document_classifier import process_and_classify_document
 from src.storage import store_document
 from src.summarizer import generate_summary
 from src.metrics_tracker import MetricsTracker
@@ -79,7 +79,8 @@ class DocumentController:
         metrics_tracker.set_ocr_quality(quality)
         
         # Step 2: Document classification
-        classification = classify_document(text)
+        classification = process_and_classify_document(text)
+        metrics_tracker.increment_llm_calls()
         
         # Step 3: Store document
         storage_path = store_document(filepath, text, classification)
