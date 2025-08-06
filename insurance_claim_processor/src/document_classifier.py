@@ -2,12 +2,15 @@ import os
 import google.generativeai as genai # type: ignore
 import re
 from typing import Dict
+import time
+from .metrics_tracker import metrics_tracker
 
 def classify_document_using_LLM(text: str) -> Dict[str, str]:
     """
     Uses Gemini AI to classify documents with high accuracy.
     Returns classification with confidence score and reasoning.
     """
+    start_time = time.time()
     try:
         genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
         model = genai.GenerativeModel('gemini-1.5-flash')
@@ -30,8 +33,22 @@ def classify_document_using_LLM(text: str) -> Dict[str, str]:
         response = model.generate_content(classification_prompt)
         result = parse_ai_classification(response.text)
         
-        return result  
+        latency = time.time() - start_time
+        metrics_tracker.classification.update(
+            classification=result['classification'],
+            confidence=result['confidence'],
+            latency=latency
+        )
+        
+        return result
+        
     except Exception as e:
+        latency = time.time() - start_time
+        metrics_tracker.classification.update(
+            classification='error',
+            confidence=0,
+            latency=latency
+        )
         return f"AI classification failed: {e}"
         
 
@@ -61,7 +78,11 @@ def parse_ai_classification(response_text: str) -> Dict[str, any]:
 
         print(f"AI Classification Result: {classification}, Confidence: {confidence}, Reasoning: {reasoning}")
 
-        return classification
+        return {
+            "classification": classification,
+            "confidence": confidence,
+            "reasoning": reasoning,
+        }
         
     except Exception as e:
         print(f"Error parsing AI response: {e}")
@@ -85,8 +106,9 @@ def process_and_classify_document(text: str) -> Dict[str, str]:
     try:
         # Classify the document
         classification_result = classify_document_detailed(text)
-              
-        return classification_result
+        
+        print(f"Document: {metrics_tracker.get_metrics()}")
+        return classification_result["classification"]
         
     except Exception as e:
         print(f"Document processing failed: {e}")
