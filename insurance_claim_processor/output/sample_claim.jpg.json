@@ -1,5 +1,5 @@
 {
-    "classification": "Medical Records",
+    "classification": "medical_records",
     "chunks": [
         "This is a detailed medical report from the central hospital.",
         "The patient John Doe, was admitted with a severe personal injury to his left leg.",

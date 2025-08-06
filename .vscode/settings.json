@@ -1,0 +1,5 @@
+{
+    "python.analysis.extraPaths": [
+        "./insurance_claim_processor"
+    ]
+}

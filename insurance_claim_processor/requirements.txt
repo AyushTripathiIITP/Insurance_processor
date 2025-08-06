@@ -3,3 +3,5 @@ Pillow
 Flask
 Werkzeug
 flask-cors
+pandas
+random

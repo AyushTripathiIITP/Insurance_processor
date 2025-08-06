@@ -30,7 +30,6 @@ def process_document_with_gemini_ocr(file_path):
         if quality < 45:
             raise ValueError(f"Document quality is too low: {quality}%")
 
-        print(f"OCR results:\n{text}\nQuality: {quality}%")
         return text, quality
 
     except Exception as e:

@@ -76,7 +76,7 @@ def parse_ai_classification(response_text: str) -> Dict[str, any]:
         if reason_match:
             reasoning = reason_match.group(1).strip()
 
-        print(f"AI Classification Result: {classification}, Confidence: {confidence}, Reasoning: {reasoning}")
+        # print(f"AI Classification Result: {classification}, Confidence: {confidence}, Reasoning: {reasoning}")
 
         return {
             "classification": classification,
@@ -106,8 +106,6 @@ def process_and_classify_document(text: str) -> Dict[str, str]:
     try:
         # Classify the document
         classification_result = classify_document_detailed(text)
-        
-        print(f"Document: {metrics_tracker.get_metrics()}")
         return classification_result["classification"]
         
     except Exception as e:
