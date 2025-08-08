@@ -14,7 +14,7 @@ def process_document_with_gemini_ocr(file_path):
 
         image_parts = [
             {
-                "mime_type": "image/jpeg",  # Adjust if needed
+                "mime_type": "image/png",  # Adjust if needed
                 "data": image_data
             }
         ]
