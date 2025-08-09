@@ -14,12 +14,19 @@ def classify_document_using_LLM(text: str) -> Dict[str, str]:
     try:
         genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
         model = genai.GenerativeModel('gemini-1.5-flash')
+
+        # dummy implementation of context fetch from vector store
+        # In a real application, this would query a vector store for relevant context
+        # For this example, we will use a static context
+        context_fetch_from_vector_store = "This is a detailed medical report from the central hospital. The patient John Doe, was admitted with a severe personal injury to his left leg. The unfortunate accident happened during a morning walk on the 15th of March."
         
         classification_prompt = f"""
         You are an expert document classifier analyze the following document text and classify it into one of these three categories:
         1. medical_records - Medical reports, lab results, prescriptions, hospital records, doctor notes, medical bills, health insurance documents
         2. personal_injury - Accident reports, injury claims, insurance claims related to accidents, legal documents about injuries, workers compensation
         3. others - Any document that doesn't fit the above categories
+
+        Take resemblance from the following context: {context_fetch_from_vector_store}
         
         Document text:
         {text[:2000]}
@@ -57,8 +64,9 @@ def parse_ai_classification(response_text: str) -> Dict[str, any]:
     Parses the AI response to extract classification details.
     """
     try:
-        classification = "Others"  # default
-        confidence = 50  # default
+        # Default values in case parsing fails
+        classification = "Others"
+        confidence = 50
         reasoning = "Unable to parse AI response"
         
         # Extract classification
